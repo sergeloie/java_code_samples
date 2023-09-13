@@ -34,4 +34,7 @@ int result = Arrays.stream(nums).reduce(0, (x, y) -> x ^ y);
 
 //Вывести на печать числа от 1 до 100
 IntStream.range(0, 101)
-                .forEach(System.out::println);
+        .forEach(System.out::println);
+//или
+IntStream.rangeClosed(0, 100)
+        .forEach(System.out::println);
