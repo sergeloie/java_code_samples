@@ -25,7 +25,7 @@ return Arrays.stream(arr)
 
 //Сумма чисел в массиве
 int[] arr = {1,15,6,3};
-var sumNum = Arrays.stream(arr).sum();
+int sumNum = Arrays.stream(arr).sum();
 
 
 //Сумма цифр всех чисел в массиве
