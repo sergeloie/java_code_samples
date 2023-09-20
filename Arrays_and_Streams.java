@@ -57,8 +57,15 @@ IntStream.rangeClosed(0, 100)
 //"is2 Thi1s T4est 3a"  -->  "Thi1s is2 3a T4est"
 //"4of Fo1r pe6ople g3ood th5e the2"  -->  "Fo1r the2 g3ood 4of th5e pe6ople"
 
-  public static String order(String words) {
-    return Arrays.stream(words.split(" "))
-      .sorted(Comparator.comparing(s -> Integer.valueOf(s.replaceAll("\\D", ""))))
-      .reduce((a, b) -> a + " " + b).get();
-  }
+public static String order(String words) {
+        return Arrays.stream(words.split(" "))
+                .sorted(Comparator.comparing(s -> Integer.valueOf(s.replaceAll("\\D", ""))))
+                .reduce((a, b) -> a + " " + b).get();
+}
+// или
+public static String order(String words) {
+        return Arrays.stream(words.split(" "))
+                .sorted(Comparator.comparing(s -> s.replaceAll("\\D+", "")))
+                .collect(Collectors.joining(" "));
+}
+
