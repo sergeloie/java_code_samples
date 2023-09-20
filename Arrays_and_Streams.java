@@ -69,3 +69,15 @@ public static String order(String words) {
                 .collect(Collectors.joining(" "));
 }
 
+// или
+public class Order {
+        public static String order(String words) {
+                return Pattern.compile(" ")
+                        .splitAsStream(words)
+                        .sorted(Comparator.comparingInt(Order::intExtractor))
+                        .collect(Collectors.joining(" "));
+}
+public static int intExtractor(String candidate){
+        return new Scanner(candidate).useDelimiter("\\D+").nextInt();
+}
+
