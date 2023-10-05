@@ -81,3 +81,15 @@ public static int intExtractor(String candidate){
         return new Scanner(candidate).useDelimiter("\\D+").nextInt();
 }
 
+// Получить пересечение массивов без повторений
+public static int[] getIntersectionOfSortedArrays(int[] numbers1, int[] numbers2) {
+        Map<Integer, Long> counts = IntStream.concat(Arrays.stream(numbers1).distinct(), Arrays.stream(numbers2).distinct())
+                .boxed()
+                .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+        return counts.entrySet().stream()
+                .filter(entry -> entry.getValue() == 2)
+                .mapToInt(Map.Entry::getKey)
+                .distinct()
+                .sorted()
+                .toArray();
+    }
