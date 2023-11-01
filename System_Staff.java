@@ -12,4 +12,4 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 long startTime = System.currentTimeMillis();
 
 long endTime = System.currentTimeMillis();
-System.out.printf("Execution time: %s %n", formatDuration(endTime - startTime, "HH:MM:ss.SS"));
+System.out.printf("Execution time: %s %n", formatDuration(endTime - startTime, "HH:mm:ss.SSS"));
