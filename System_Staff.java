@@ -7,6 +7,8 @@ System.out.println("Размер heap space: " + totalHeapSpaceSize + " MB");
 
 
 // отобразить время работы приложения
+import org.apache.commons.lang3.time.DurationFormatUtils;
+
 long startTime = System.currentTimeMillis();
 
 long endTime = System.currentTimeMillis();
