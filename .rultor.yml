@@ -2,7 +2,5 @@ docker:
   image: yegor256/rultor-image
 merge:
  script:
-   - "git checkout main"
-   - "git pull origin main"
-   - "git merge --no-ff $RULTOR_PULL_REQUEST_BRANCH"
+   echo "testing..."
 
