@@ -1,0 +1,6 @@
+merge:
+ script:
+   - "git checkout master"
+   - "git pull origin master"
+   - "git merge --no-ff $RULTOR_PULL_REQUEST_BRANCH"
+   - "git push origin master"
