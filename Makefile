@@ -1,2 +1,2 @@
 dummy:
-  echo "dummy check"
+	echo "dummy check"
