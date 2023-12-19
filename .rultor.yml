@@ -2,5 +2,6 @@ docker:
   image: yegor256/rultor-image
 merge:
  script:
-   echo "testing..."
+   make dummy
+   
 
