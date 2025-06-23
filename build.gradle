@@ -1,0 +1,10 @@
+tasks.register("generateOpenapi") {
+    group 'openapi'
+    doLast {
+        def codegenConfig = CodegenConfigLoader.forName('spring')
+        codegenConfig.setOutputDir("$projectDir/build/openapi")
+// для сопоставления существующего класса схеме класса в файле openapi.yaml. чтобы не генерировать дубли классов
+        codegenConfig.typeMapping().put("ResponseDto", "ru.xmlvalidator.dto.ResponseDto")
+        codegenConfig.importMapping().put("ResponseDto", "ru.xmlvalidator.dto.ResponseDto")
+    }
+}
