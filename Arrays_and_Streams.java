@@ -30,13 +30,10 @@ int sumNum = Arrays.stream(arr).sum();
 
 //Сумма цифр всех чисел в массиве
 int[] arr = {1,15,6,3};
-String temp2 = Arrays.stream(arr)
-                      .mapToObj(String::valueOf)
-                      .collect(Collectors.joining());
-int sumDig = Arrays.stream(temp2.split(""))
-                    .mapToInt(Integer::parseInt)
-                    .sum();
-
+int digitSum = Arrays.stream(nums)
+        .mapToObj(Integer::toString)
+        .flatMap(str -> str.chars().mapToObj(c -> c - '0'))
+        .reduce(0, Integer::sum);
 
 //В массиве все числа парные, кроме одного. Как его найти? XOR всех элементов
 int[] nums = {2, 3, 1, 2, 3};
