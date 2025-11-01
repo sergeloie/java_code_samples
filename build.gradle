@@ -18,23 +18,14 @@ tasks.register('resolveAllSourceJars') {
         targetDir.mkdirs()
 
         def allComponentIds = []
-
-        try {
-            def rootProjectConfigs = configurations.runtimeClasspath.incoming.resolutionResult.allDependencies.collect { it.selected.id }
-            allComponentIds.addAll(rootProjectConfigs)
-        } catch (Exception ignored) {
-            println "Нет конфигурации для корневого проекта"
-        }
-
-        subprojects { subproject ->
+        allprojects {proj ->
             try {
-                def subprojectConfigs = subproject.configurations.runtimeClasspath.incoming.resolutionResult.allDependencies.collect { it.selected.id }
-                allComponentIds.addAll(subprojectConfigs)
+                def projectConfigs = proj.configurations.runtimeClasspath.incoming.resolutionResult.allDependencies.collect { it.selected.id }
+                allComponentIds.addAll(projectConfigs)
             } catch (Exception ignored) {
-                println "Нет конфигурации для подпроекта"
             }
-        }
 
+        }
         allComponentIds = allComponentIds.unique()
 
         def result = dependencies.createArtifactResolutionQuery()
@@ -56,20 +47,16 @@ tasks.register('resolveAllSourceJars') {
                             .replaceAll('[^a-z0-9._-]', '_')
 
                     def targetFile = new File(targetDir, safeFileName)
-
-                    // Копируем файл
                     sourceFile.withInputStream { input ->
                         targetFile.withOutputStream { output ->
                             output << input
                         }
                     }
-
                     copiedCount++
                     println "Скопирован: $safeFileName"
                 }
             }
         }
-
         println "Итого скопировано $copiedCount source JAR файлов в: $targetDir"
     }
 }
