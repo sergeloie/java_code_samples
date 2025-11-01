@@ -8,3 +8,68 @@ tasks.register("generateOpenapi") {
         codegenConfig.importMapping().put("ResponseDto", "ru.xmlvalidator.dto.ResponseDto")
     }
 }
+
+
+// получение всех jar с исходными текстами
+tasks.register('resolveAllSourceJars') {
+    doLast {
+        def targetDir = file("$project.projectDir/build/downloaded-sources/all-jars")
+        delete targetDir
+        targetDir.mkdirs()
+
+        def allComponentIds = []
+
+        try {
+            def rootProjectConfigs = configurations.runtimeClasspath.incoming.resolutionResult.allDependencies.collect { it.selected.id }
+            allComponentIds.addAll(rootProjectConfigs)
+        } catch (Exception ignored) {
+            println "Нет конфигурации для корневого проекта"
+        }
+
+        subprojects { subproject ->
+            try {
+                def subprojectConfigs = subproject.configurations.runtimeClasspath.incoming.resolutionResult.allDependencies.collect { it.selected.id }
+                allComponentIds.addAll(subprojectConfigs)
+            } catch (Exception ignored) {
+                println "Нет конфигурации для подпроекта"
+            }
+        }
+
+        allComponentIds = allComponentIds.unique()
+
+        def result = dependencies.createArtifactResolutionQuery()
+                .forComponents(allComponentIds)
+                .withArtifacts(JvmLibrary, SourcesArtifact)
+                .execute()
+
+        int copiedCount = 0
+
+        for (component in result.resolvedComponents) {
+            component.getArtifacts(SourcesArtifact).each { artifact ->
+                def sourceFile = artifact.file
+                if (sourceFile.exists() && sourceFile.name.endsWith('jar')) {
+                    // Создаем уникальное имя файла
+                    def safeFileName = "${component.id.group}.${component.id.module}-${component.id.version}-sources.jar"
+                            .replaceAll(':', '.')
+                            .replaceAll('/', '.')
+                            .toLowerCase()
+                            .replaceAll('[^a-z0-9._-]', '_')
+
+                    def targetFile = new File(targetDir, safeFileName)
+
+                    // Копируем файл
+                    sourceFile.withInputStream { input ->
+                        targetFile.withOutputStream { output ->
+                            output << input
+                        }
+                    }
+
+                    copiedCount++
+                    println "Скопирован: $safeFileName"
+                }
+            }
+        }
+
+        println "Итого скопировано $copiedCount source JAR файлов в: $targetDir"
+    }
+}
