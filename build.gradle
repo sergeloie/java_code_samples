@@ -60,3 +60,23 @@ tasks.register('resolveAllSourceJars') {
         println "Итого скопировано $copiedCount source JAR файлов в: $targetDir"
     }
 }
+
+//заменить версию для группы компонентов
+configurations.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.apache.tomcat.embed') {
+            details.useVersion '9.0.111'
+        }
+    }
+}
+
+// или иак
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.apache.tomcat.embed') {
+                details.useVersion '9.0.111'
+            }
+        }
+    }
+}
